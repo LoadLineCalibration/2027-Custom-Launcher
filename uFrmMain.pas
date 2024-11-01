@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.Imaging.pngimage, Vcl.StdCtrls, system.IOUtils,
   Launch2027.consts, system.IniFiles, system.Generics.Collections, system.Generics.Defaults, System.StrUtils,
-  Launch2027.Utils, Launch2027.Classes, System.Threading, ES.Labels, System.Types, System.UITypes;
+  Launch2027.Utils, Launch2027.Classes, ES.Labels, System.Types, System.UITypes;
 
 type
   TfrmMain = class(TForm)
@@ -30,6 +30,8 @@ type
     btnSwitchVO: TButton;
     lnkWebSite: TEsLinkLabel;
     lnkForum: TEsLinkLabel;
+    lblSingleCore: TLabel;
+    chkSingleCore: TCheckBox;
 
     // new procedures
     procedure FindIntFiles(const Dir: string);
@@ -52,6 +54,7 @@ type
     procedure cmbRenderDevicesChange(Sender: TObject);
     procedure btnSwitchVOClick(Sender: TObject);
     procedure cmbGameLangChange(Sender: TObject);
+    procedure lblSingleCoreClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -145,8 +148,8 @@ begin
 
     try
         // ENB effects
-        var ENBEnabled := EnbIni.ReadBool('GLOBAL', 'UseEffect', True);
-        chkEnhancedGraphics.Checked := ENBEnabled;
+        var bENBEnabled := EnbIni.ReadBool('GLOBAL', 'UseEffect', True);
+        chkEnhancedGraphics.Checked := bENBEnabled;
 
         // language
         var GameLang := GameIni.ReadString('Engine.Engine', 'Language', 'rus');
@@ -172,16 +175,17 @@ begin
         cmbRenderDevicesChange(self);
 
         // windowed mode/full screen
-        var bRunInWindow := GameIni.ReadBool('WinDrv.WindowsClient','StartupFullscreen', True);
-        case bRunInWindow of
-            True:  chkRunInWindow.Checked := False;
-            False: chkRunInWindow.Checked := True;
-        end;
+        var bRunInWindow := GameIni.ReadString('WinDrv.WindowsClient','StartupFullscreen', 'True');
+        if UpperCase(bRunInWindow) = 'TRUE' then
+            chkRunInWindow.Checked := False
+        else if UpperCase(bRunInWindow) = 'FALSE' then
+            chkRunInWindow.Checked := True;
 
+        chkSingleCore.Checked := GameIni.ReadBool('2027Launcher', 'chkSingleCore.Checked', True);
 
         // screen resolution
-        var ResX := GameIni.ReadInteger('WinDrv.WindowsClient', 'FullscreenViewportX', 800);
-        var ResY := GameIni.ReadInteger('WinDrv.WindowsClient', 'FullscreenViewportY', 600);
+        var ResX := GameIni.ReadInteger('WinDrv.WindowsClient', 'FullscreenViewportX', DEFAULT_RES_X);
+        var ResY := GameIni.ReadInteger('WinDrv.WindowsClient', 'FullscreenViewportY', DEFAULT_RES_Y);
         var ResStr := IntToStr(ResX) + 'x' + IntToStr(ResY);
 
         var bFound := False;
@@ -233,6 +237,10 @@ begin
             True:  GameIni.WriteString('WinDrv.WindowsClient', 'StartupFullscreen', 'False');
             False: GameIni.WriteString('WinDrv.WindowsClient', 'StartupFullscreen', 'True');
         end;
+
+        // Single CPU core?
+        GameIni.WriteBool('2027Launcher', 'chkSingleCore.Checked', chkSingleCore.Checked);
+
 
         // Screen resolution
         if cmbScreenRes.ItemIndex > 0 then
@@ -409,6 +417,7 @@ begin
 
             lblRunInWindow.Caption := rusRunInWindow;
             lblEnhancedGraphics.Caption := rusEnbLabel;
+            lblSingleCore.Caption := rusSingleCPUCore;
 
             btnLaunchGame.Caption := rusStartButton;
             btnSwitchVO.Caption := rusVOChangeLabel;
@@ -432,6 +441,7 @@ begin
 
             lblRunInWindow.Caption := strRunInWindow;
             lblEnhancedGraphics.Caption := strEnbLabel;
+            lblSingleCore.Caption := strSingleCPUCore;
 
             btnLaunchGame.Caption := strStartButton;
             btnSwitchVO.Caption := strVOChangeLabel;
@@ -583,7 +593,9 @@ begin
     ProcessInfo)
     then
     begin
-        SetProcessAffinityMask(ProcessInfo.hProcess, 1);
+        if chkSingleCore.Checked = True then
+            SetProcessAffinityMask(ProcessInfo.hProcess, 1);
+
         CloseHandle(ProcessInfo.hThread);
         CloseHandle(ProcessInfo.hProcess);
     end
@@ -601,6 +613,11 @@ end;
 procedure TfrmMain.lblRunInWindowClick(Sender: TObject);
 begin
     chkRunInWindow.Checked := not chkRunInWindow.Checked;
+end;
+
+procedure TfrmMain.lblSingleCoreClick(Sender: TObject);
+begin
+    chkSingleCore.Checked := not chkSingleCore.Checked;
 end;
 
 procedure TfrmMain.ToggleCustomResolutionControls(bShow: Boolean);

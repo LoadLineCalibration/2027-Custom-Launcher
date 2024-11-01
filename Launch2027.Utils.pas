@@ -11,6 +11,7 @@ function GetTotalFileSizeInMB(const Files: array of string; const Directory: str
 
 implementation
 
+// These three functions has been converted from this file: https://github.com/artema/project-2027/blob/master/launcher/Src/2027/Model/MainModel.cs
 function DegreeToRadian(Angle: Double): Double;
 begin
     Result := Angle * (Pi / 180.0);

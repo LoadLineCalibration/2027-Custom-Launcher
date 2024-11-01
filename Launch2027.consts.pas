@@ -4,6 +4,10 @@ interface
 
 const
 
+DEFAULT_RES_X = 800;
+DEFAULT_RES_Y = 600;
+
+
 AudioFiles: array[1..8] of string =
 (
     'GameConversationsAudioNPCBarks',
@@ -51,6 +55,7 @@ resourcestring
 
     strRunInWindow = 'Run in windowed mode';
     strEnbLabel = 'Use advanced effects';
+    strSingleCPUCore = 'Run on single CPU core';
 
     strStartButton = 'Launch game';
     strVOChangeLabel = 'Apply this language';
@@ -74,6 +79,7 @@ resourcestring
 
     rusRunInWindow = 'Запускать в окне';
     rusEnbLabel = 'Использовать новые эффекты';
+    rusSingleCPUCore = 'Использовать только 1 ядро процессора';
 
     rusStartButton = 'Запустить игру';
     rusVOChangeLabel = 'Включить этот язык';
@@ -87,7 +93,6 @@ resourcestring
     rusForumLabel = 'Форум';
 
     rusVoiceverChanged = 'Язык озвучивания изменён.';
-
 
 implementation
 

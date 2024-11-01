@@ -57841,7 +57841,7 @@ object frmMain: TfrmMain
   end
   object lblRunInWindow: TLabel
     Left = 218
-    Top = 188
+    Top = 180
     Width = 335
     Height = 17
     AutoSize = False
@@ -57885,7 +57885,7 @@ object frmMain: TfrmMain
   end
   object lblEnhancedGraphics: TLabel
     Left = 218
-    Top = 211
+    Top = 203
     Width = 335
     Height = 17
     AutoSize = False
@@ -57920,6 +57920,22 @@ object frmMain: TfrmMain
     ShowHint = True
     LinkColor = clHighlightText
     LinkStyle = Mixed
+  end
+  object lblSingleCore: TLabel
+    Left = 218
+    Top = 226
+    Width = 335
+    Height = 17
+    AutoSize = False
+    Caption = 'Run on single CPU core'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -12
+    Font.Name = 'Verdana'
+    Font.Style = []
+    ParentFont = False
+    Layout = tlCenter
+    OnClick = lblSingleCoreClick
   end
   object cmbScreenRes: TComboBox
     Left = 201
@@ -57976,7 +57992,7 @@ object frmMain: TfrmMain
   end
   object chkRunInWindow: TCheckBox
     Left = 201
-    Top = 188
+    Top = 180
     Width = 17
     Height = 17
     Caption = 'chkRunInWindow'
@@ -57990,9 +58006,9 @@ object frmMain: TfrmMain
   end
   object btnLaunchGame: TButton
     Left = 201
-    Top = 240
+    Top = 249
     Width = 177
-    Height = 41
+    Height = 36
     Caption = 'Run the game'
     TabOrder = 5
     OnClick = btnLaunchGameClick
@@ -58028,7 +58044,7 @@ object frmMain: TfrmMain
   end
   object chkEnhancedGraphics: TCheckBox
     Left = 201
-    Top = 211
+    Top = 203
     Width = 17
     Height = 17
     Caption = 'chkEnhancedGraphics'
@@ -58048,5 +58064,19 @@ object frmMain: TfrmMain
     Caption = 'Switch voiceover'
     TabOrder = 9
     OnClick = btnSwitchVOClick
+  end
+  object chkSingleCore: TCheckBox
+    Left = 201
+    Top = 226
+    Width = 17
+    Height = 17
+    Caption = 'chkSingleCore'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Verdana'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 10
   end
 end
